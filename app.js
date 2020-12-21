@@ -1,7 +1,7 @@
 if (localStorage.getItem("editorContent") !== null) {
   var jsCode = localStorage.getItem("editorContent");
 } else {
-  var jsCode = 'write("Hi there!")';;
+  var jsCode = 'write("Hi there!")';
 }
 
 const hotkeys = (e) => {
@@ -78,8 +78,14 @@ function run() {
   }
   `;
   jsCode = inputField.getValue();
+  var range = getSelectedRange();
+  inputField.autoFormatRange(range.from, range.to);
   output.window.eval(predefinedScripts + jsCode);
   localStorage.setItem("editorContent", jsCode);
+}
+
+function getSelectedRange() {
+  return { from: inputField.getCursor(true), to: inputField.getCursor(false) };
 }
 
 function clear() {

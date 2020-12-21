@@ -1,0 +1,48 @@
+write(\`
+	<hr>
+	<h1>Welcome to rapidJS!</h1>
+  <p>
+  rapidJS is a simple-yet-powerful JavaScript playground, with a code editor and an output pane.
+  </p>
+  <h2>Basic Usage:</h2>
+  <p>
+  rapidJS only supports JavaScript, but it can be used to insert HTML into place, like this example.
+  <br /><br />
+  For this very purpose, we have a cool built-in function, called <b>write()</b>. This function can be used to direct output to the output pane.
+  <br /><br />
+  The code is autosaved everytime you run it.
+  </p>
+  <h3>
+  Keyboard Shortcuts:
+  </h3>
+  <ul>
+  	<li>Ctrl + Enter/Return to run</li>
+    <li>Ctrl + Space to clear output</li>
+  </ul>
+  <hr>
+  <h2>Examples:</h2>
+\`)
+
+let person = {
+    firstName: 'John',
+    lastName: 'Doe',
+    age: 128
+  }
+
+  write('<u>' + person.firstName + ' ' + person.lastName +  ' is ' + person.age + ' years old. </u>' )
+  
+	write(\`
+  This is a freaking <b>input</b> field in an <b>output</b> console!!!
+  \`)
+
+write(\`
+	<input type="text" id="awesome">
+  <button onclick="printText()">Print</button>
+\`)
+
+
+function printText(){
+  let input = document.querySelector('#awesome');
+  write(input.value)
+}
+  `
