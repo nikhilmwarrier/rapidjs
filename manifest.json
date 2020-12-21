@@ -1,0 +1,23 @@
+{
+  "name": "RapidJS",
+  "short_name": "RapidJS",
+  "theme_color": "#007acc",
+  "background_color": "#007acc",
+  "display": "standalone",
+  "start_url": "index.html",
+  "icons": [
+    {
+      "src": "res/logo_128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+
+    {
+      "src": "res/logo_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

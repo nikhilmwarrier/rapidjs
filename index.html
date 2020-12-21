@@ -3,25 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme color" content="#007acc" />
     <link rel="shortcut icon" href="./res/logo_128.png" />
+    <link rel="manifest" href="manifest.json" />
     <title>rapidJS</title>
     <link rel="stylesheet" href="cm/codemirror.css" />
-    <link rel="stylesheet" href="cm/theme/monokai.css" />
+    <link rel="stylesheet" href="cm/theme/vscode-dark.css" />
     <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
   </head>
   <body onload="run()">
-    <button id="run" onclick="run()"></button>
+    <button
+      id="run"
+      onclick="run()"
+      class="tooltip-bottom"
+      title="Run (Ctrl + Enter)"
+    ></button>
     <div class="wrapper">
       <div class="editor" contenteditable="true"></div>
       <div id="dragme"></div>
       <iframe name="output" frameborder="0"></iframe>
     </div>
+    <footer>
+      <div class="left">
+        <span onclick="showPopup('#about')">RapidJS</span>
+        <div class="popup popup-left" id="about">
+          <span class="closebtn" onclick="hidePopup('#layout')">&times</span>
+          <span></span>
+          <span
+            class="passive"
+            onclick="window.location.href = 'http://nikhilmwarrier.github.io'"
+            >RapidJS &copy; 2020 <br />Created by Nikhil M Warrier</span
+          >
+        </div>
+      </div>
+      <div class="right">
+        <span
+          id="unsavedchanges"
+          data-tooltip="Your code is saved everytime you run it, either from the run button or by pressing Ctrl + Enter"
+          >Saved</span
+        >
+        <span class="btn" onclick="showPopup('#layout')">Layout</span>
+        <div class="popup" id="layout">
+          <span class="closebtn" onclick="hidePopup('#layout')">&times</span>
+          <span onclick="fullscreenEditor()">Fullscreen Editor</span>
+          <span onclick="fullscreenPreview()">Fullscreen Preview</span>
+          <span onclick="sideBySide()">Side by Side</span>
+        </div>
+        <span
+          onclick="prettify()"
+          class="btn"
+          data-tooltip="Select code you want to format, then click this button"
+          >Prettify</span
+        >
+        <span id="line-no" onclick="fullscreenEditor()">Ln 10</span>
+        <span>JavaScript</span>
+      </div>
+    </footer>
     <script src="cm/codemirror.js"></script>
     <script src="cm/javascript/javascript.js"></script>
     <script src="cm/addon/matchbrackets.js"></script>
     <script src="cm/addon/closebrackets.js"></script>
     <script src="cm/addon/formatting.js"></script>
-    <script></script>
+    <script src="app.js"></script>
   </body>
 </html>

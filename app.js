@@ -8,9 +8,12 @@ const hotkeys = (e) => {
   let windowEvent = window.event ? event : e;
 
   if (windowEvent.keyCode === 13 && windowEvent.ctrlKey) {
+    e.preventDefault();
     run();
   } else if (windowEvent.keyCode === 32 && windowEvent.ctrlKey) {
     clear();
+  } else if (windowEvent.keyCode === 191 && windowEvent.ctrlKey) {
+    commentSelection();
   }
 };
 
@@ -20,13 +23,23 @@ var inputField = CodeMirror(document.body, {
   // value: "function myScript(){return 100;}\n",
   value: jsCode,
   mode: "javascript",
-  theme: "monokai",
+  theme: "vscode-dark",
   tabSize: 2,
   lineNumbers: true,
   lineWrapping: false,
   matchBrackets: true,
   autoCloseBrackets: true,
+  extraKeys: {
+    "Ctrl-S": function (e) {
+      run();
+    },
+    "Cmd-S": function (e) {
+      run();
+    },
+  },
 });
+
+CodeMirror.commands["selectAll"](inputField);
 
 let inputElement = document.querySelector(".editor");
 let runBtn = document.querySelector("#run");
@@ -78,10 +91,20 @@ function run() {
   }
   `;
   jsCode = inputField.getValue();
-  var range = getSelectedRange();
-  inputField.autoFormatRange(range.from, range.to);
   output.window.eval(predefinedScripts + jsCode);
   localStorage.setItem("editorContent", jsCode);
+}
+
+setInterval(() => {
+  // console.log(inputField.getCursor(false).line);
+  let lineNumField = document.querySelector("#line-no");
+  lineNum = Number(inputField.getCursor(false).line) + 1;
+  lineNumField.innerText = "Ln " + lineNum;
+}, 500);
+
+function commentSelection(isComment) {
+  var range = getSelectedRange();
+  inputField.commentRange(isComment, range.from, range.to);
 }
 
 function getSelectedRange() {
@@ -92,10 +115,27 @@ function clear() {
   output.document.body.innerHTML = "";
 }
 
+function prettify() {
+  selectElementContents(inputField);
+  var range = getSelectedRange();
+  inputField.autoFormatRange(range.from, range.to);
+}
+
+setInterval(() => {
+  changeIndicator = document.getElementById("unsavedchanges");
+  if (localStorage.getItem("editorContent") != inputField.getValue()) {
+    changeIndicator.innerHTML =
+      "There are unsaved changes. Run your code to save them";
+  } else if (localStorage.getItem("editorContent") == inputField.getValue()) {
+    changeIndicator.innerHTML = "Saved";
+  }
+  unsavedchanges;
+}, 2000);
+
 document.addEventListener("DOMContentLoaded", function () {
   // Query the element
   const resizer = document.getElementById("dragme");
-  const leftSide = document.querySelector(".cm-s-monokai");
+  const leftSide = document.querySelector(".cm-s-vscode-dark");
   const rightSide = resizer.nextElementSibling;
 
   // The current position of mouse
@@ -138,10 +178,12 @@ document.addEventListener("DOMContentLoaded", function () {
     // }
 
     // leftSide.style.width = `${newLeftWidth}%`;
-    document.documentElement.style.setProperty(
-      "--editor-width",
-      `${newLeftWidth}%`
-    );
+    if (newLeftWidth <= 99 && newLeftWidth >= 1) {
+      document.documentElement.style.setProperty(
+        "--editor-width",
+        `${newLeftWidth}%`
+      );
+    }
 
     resizer.style.cursor = "col-resize";
     document.body.style.cursor = "col-resize";
@@ -171,3 +213,25 @@ document.addEventListener("DOMContentLoaded", function () {
   // Attach the handler
   resizer.addEventListener("mousedown", mouseDownHandler);
 });
+
+function showPopup(selector) {
+  var popup = document.querySelector(selector);
+  popup.style.opacity = 1;
+  popup.style.pointerEvents = "all";
+}
+
+function hidePopup(selector) {
+  var popup = document.querySelector(selector);
+  popup.style.opacity = 0;
+  popup.style.pointerEvents = "none";
+}
+
+function fullscreenEditor() {
+  document.documentElement.style.setProperty("--editor-width", "99%");
+}
+function fullscreenPreview() {
+  document.documentElement.style.setProperty("--editor-width", "1%");
+}
+function sideBySide() {
+  document.documentElement.style.setProperty("--editor-width", "70%");
+}
